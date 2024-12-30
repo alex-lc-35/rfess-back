@@ -19,3 +19,13 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+# Fichiers générés par Docker
+docker/php/php.ini~
+docker/nginx/nginx.conf~
+
+# Volumes et logs
+db_data/
+*.log
+
+compose.override.prod.yaml
