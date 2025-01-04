@@ -29,3 +29,6 @@ db_data/
 *.log
 
 compose.override.prod.yaml
+
+.env
+.env.prod
