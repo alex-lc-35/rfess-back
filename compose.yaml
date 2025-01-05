@@ -1,28 +1,48 @@
-version: "3.9"
-
 services:
   mysql:
     image: mysql:8.0
     container_name: symfony-mysql
     environment:
-      # Mot de passe root MySQL (uniquement pour l'administration)
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-
-      # Nom de la base de données
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-rfss}
-
-      # Utilisateur "non-root" pour l'application
-      MYSQL_USER: ${MYSQL_USER:-app}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-app_pass}
-
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql:rw
-
+    ports:
+      - "3307:3306"  # Pour éviter les conflits avec MySQL local
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
-      timeout: 5s
+      interval: 10s
       retries: 5
-      start_period: 30s
+      timeout: 5s
+
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    container_name: symfony-php
+    volumes:
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - .:/var/www/html:rw,cached  # Montage local du code source
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+    depends_on:
+      - mysql
+    ports:
+      - "9000:9000"  # Pour que Nginx puisse communiquer avec PHP-FPM
+
+  nginx:
+    image: nginx:alpine
+    container_name: symfony-nginx
+    ports:
+      - "8101:80"  # Exposé sur le port 8101 en local et prod
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - .:/var/www/html:rw,cached  # En dev : montage du code source pour Nginx
+    depends_on:
+      - php
 
 volumes:
   mysql_data:

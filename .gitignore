@@ -28,7 +28,6 @@ docker/nginx/nginx.conf~
 db_data/
 *.log
 
-compose.override.prod.yaml
+docker-compose.override.yaml
 
-.env
 .env.prod
