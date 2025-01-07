@@ -76,6 +76,7 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
+        "serve:dev": "powershell -Command \"$env:APP_ENV='dev'; symfony serve --port=8101\"",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
