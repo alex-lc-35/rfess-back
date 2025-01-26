@@ -30,7 +30,8 @@ class PlaceController extends AbstractController
     public function index(Request $request, PlaceRepository $placeRepository): JsonResponse
     {
         $city = $request->query->get('city');
-        $categories = $request->query->get('categories'); // format attendu : "cat1,cat2"
+        $categories = $request->query->get('categories');
+
 
         $queryBuilder = $placeRepository->createQueryBuilder('p');
 
@@ -64,7 +65,10 @@ class PlaceController extends AbstractController
             $place->setLatitude($data['latitude']);
             $place->setLongitude($data['longitude']);
             $place->setDescription($data['description']);
-            // Ajouter les catégories ici si nécessaire
+            $place->setWebsiteUrl($data['websiteUrl']);
+            $place->setFacebookUrl($data['facebookUrl']);
+            $place->setInstagramUrl($data['instagramUrl']);
+            $place->setXUrl($data['xUrl']);
 
             $entityManager->persist($place);
             $entityManager->flush();

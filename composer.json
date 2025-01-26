@@ -76,7 +76,7 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
-        "serve:dev": "powershell -Command \"$env:APP_ENV='dev'; symfony serve --port=8101\"",
+        "serve:dev": "symfony serve --port=8101 --no-tls",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
@@ -99,6 +99,7 @@
         }
     },
     "require-dev": {
+        "nelmio/api-doc-bundle": "^4.34",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "7.2.*",
         "symfony/css-selector": "7.2.*",
